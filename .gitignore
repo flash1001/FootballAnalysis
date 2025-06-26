@@ -6,3 +6,4 @@ utils/__pycache__
 output_videos
 tracker/__pycache__
 stubs/*
+team_assigner/__pycache__
