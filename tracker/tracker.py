@@ -5,6 +5,7 @@ import os
 import sys
 import cv2
 import numpy as np
+import pandas as pd
 
 sys.path.append('../')
 from utils import get_center_of_bbox, get_bbox_width
@@ -13,6 +14,18 @@ class Tracker:
     def __init__(self, model_path):
         self.model = YOLO(model_path)
         self.tracker = sv.ByteTrack()
+        
+    def interpolate_ball_positions(self,ball_positions):
+        ball_positions = [x.get(1,{}).get('bbox',[]) for x in ball_positions]
+        df_ball_positions = pd.DataFrame(ball_positions,columns=['x1','y1','x2','y2'])
+
+        # Interpolate missing values
+        df_ball_positions = df_ball_positions.interpolate()
+        df_ball_positions = df_ball_positions.bfill()
+
+        ball_positions = [{1: {"bbox":x}} for x in df_ball_positions.to_numpy().tolist()]
+
+        return ball_positions    
         
     def detect_frames(self, frames):
         # Memory friendly prediction using the model
@@ -23,7 +36,6 @@ class Tracker:
             detections += detections_batch
         return detections
         
-    
     def get_object_tracks(self, frames, read_from_stub=False, stub_path=None): 
         
         if read_from_stub and stub_path is not None and os.path.exists(stub_path):
