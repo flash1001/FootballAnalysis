@@ -7,3 +7,4 @@ output_videos
 tracker/__pycache__
 stubs/*
 team_assigner/__pycache__
+player_ball_assigner/__pycache__
