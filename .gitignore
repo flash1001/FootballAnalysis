@@ -10,3 +10,4 @@ team_assigner/__pycache__
 player_ball_assigner/__pycache__
 camera_movement_estimator/__pycache__
 view_transformer/__pycache__
+speed_and_distance_estimator/__pycache__
